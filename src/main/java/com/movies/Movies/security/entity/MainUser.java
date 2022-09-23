@@ -32,7 +32,7 @@ public class MainUser implements UserDetails {
         List<GrantedAuthority> authorities =
                 user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role
                         .getRoleName().name())).collect(Collectors.toList());
-        return  new MainUser(user.getName(), user.getEmail(), user.getUsername(), user.getPassword(), authorities);
+        return  new MainUser(user.getName(), user.getUsername(),user.getEmail() , user.getPassword(), authorities);
     }
 
     @Override

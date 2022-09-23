@@ -16,7 +16,7 @@ public class JwtProvider {
     private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
 
     @Value("${jwt.secret}")
-    private String Secret;
+    private String secret;
 
     @Value("${jwt.expiration}")
     private int expiration;
@@ -26,16 +26,17 @@ public class JwtProvider {
         return Jwts.builder().setSubject(mainUser.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expiration * 1000))
-                .signWith(SignatureAlgorithm.ES512,Secret)
+                .signWith(SignatureAlgorithm.HS512,secret)
                 .compact();
     }
 
     public String getUsernameFromToken(String token){
-        return Jwts.parser().setSigningKey(Secret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
     public boolean validateToken(String token){
         try{
-           Jwts.parser().setSigningKey(Secret).parseClaimsJws(token);
+           Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+           return true;
         }
         catch(MalformedJwtException e){
             logger.error("Malformed token");

@@ -37,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
           }
         }
         catch (Exception e){
-            logger.error("Fail in doFilter mehtod");
+            logger.error("Fail in doFilter method" + e.getMessage());
         }
         filterChain.doFilter(req, res);
     }

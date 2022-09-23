@@ -7,11 +7,13 @@ import javax.validation.constraints.NotBlank;
 
 public class UserLogin {
 
-    @NotBlank
+
     @Getter @Setter
+    @NotBlank
     private String username;
 
-    @NotBlank
+
     @Getter @Setter
+    @NotBlank
     private String password;
 }

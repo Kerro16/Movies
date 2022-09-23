@@ -20,13 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 
-import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +31,7 @@ import java.util.Set;
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
-//54546
+
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -50,7 +47,8 @@ public class AuthController {
     @Autowired
     JwtProvider jwtProvider;
 
-    public ResponseEntity<?> newUsers(@Valid @RequestBody NewUser newUser, BindingResult bindingResult) {
+    @PostMapping("/new")
+    public ResponseEntity<?> newUsers(@Validated @RequestBody NewUser newUser, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return new ResponseEntity(new Message("Wrong field or invalid mail"), HttpStatus.BAD_REQUEST);
         if (userService.existsByUsername(newUser.getUsername()))
@@ -67,14 +65,15 @@ public class AuthController {
         return new ResponseEntity<>(new Message("User saved"), HttpStatus.CREATED);
     }
 
-    public ResponseEntity<JwtDto> login (@Valid @RequestBody UserLogin userLogin, BindingResult bindingResult){
+    @PostMapping("/login")
+    public ResponseEntity<JwtDto> login(@Validated @RequestBody UserLogin userLogin, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return  new ResponseEntity(new Message("Bad fields"), HttpStatus.BAD_REQUEST);
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLogin.getUsername(),userLogin.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         JwtDto jwtDto = new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }

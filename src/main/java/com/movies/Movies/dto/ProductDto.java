@@ -20,13 +20,13 @@ public class ProductDto {
     private String image;
     @Min(0)
     @Getter @Setter
-    private int stock;
+    private Integer stock;
     @Min(0)
     @Getter @Setter
-    private float rentalprice;
+    private Float rentalprice;
     @Min(0)
     @Getter @Setter
-    private float saleprice;
+    private Float saleprice;
 
     @Getter @Setter
     private int available;
@@ -34,13 +34,12 @@ public class ProductDto {
     public ProductDto() {
     }
 
-    public ProductDto(String title, String description, String image, int stock, float rentalprice, float saleprice, int available) {
+    public ProductDto(String title, String description, String image, Integer stock, Float rentalprice, Float saleprice) {
         this.title = title;
         this.description = description;
         this.image = image;
         this.stock = stock;
         this.rentalprice = rentalprice;
         this.saleprice = saleprice;
-        this.available = available;
     }
 }

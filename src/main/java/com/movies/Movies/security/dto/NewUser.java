@@ -11,20 +11,25 @@ import java.util.Set;
 
 public class NewUser {
 
-    @NotBlank
+
     @Getter @Setter
+    @NotBlank
     private String name;
 
-    @NotBlank
+
     @Getter @Setter
+    @NotBlank
     private String username;
 
-    @Email
+
     @Getter @Setter
+    @NotBlank
+    @Email
     private String email;
 
-    @NotBlank
+
     @Getter @Setter
+    @NotBlank
     private String password;
 
     @Getter @Setter

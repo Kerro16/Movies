@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,21 +43,22 @@ public class ProductController {
         return new ResponseEntity(product,HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/create")
     public ResponseEntity<?> create(@RequestBody ProductDto productDto) {
         if (StringUtils.isBlank(productDto.getTitle()))
             return new ResponseEntity<>(new Message("Title cant be blank"), HttpStatus.BAD_REQUEST);
-        if (productDto.getRentalprice() < 0)
+        if (productDto.getRentalprice() == null || productDto.getRentalprice() < 0)
             return new ResponseEntity<>(new Message("Rental price cant be negative"), HttpStatus.BAD_REQUEST);
-        if (productDto.getSaleprice() < 0)
+        if (productDto.getSaleprice()== null || productDto.getSaleprice() < 0)
             return new ResponseEntity<>(new Message("Sale price cant be negative"), HttpStatus.BAD_REQUEST);
-        if (productDto.getStock() < 0)
+        if (productDto.getStock()==null || productDto.getStock()< 0)
             return new ResponseEntity<>(new Message("Stock cant be negative"), HttpStatus.BAD_REQUEST);
         Product product = new Product(productDto.getTitle(), productDto.getDescription(),productDto.getImage(),productDto.getStock(),productDto.getRentalprice(),productDto.getSaleprice(),productDto.getAvailable());
         productService.save(product);
         return new ResponseEntity<>(new Message("Product created"), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id,@RequestBody ProductDto productDto) {
         if(!productService.existById(id))
@@ -85,7 +86,7 @@ public class ProductController {
         productService.save(product);
         return new ResponseEntity(new Message("Product updated"), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") int id){
         if(!productService.existById(id))

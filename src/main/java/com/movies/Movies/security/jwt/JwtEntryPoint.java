@@ -18,8 +18,8 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
     private final static Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
 
     @Override
-    public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException e) throws IOException, ServletException {
         logger.error("fail in commerce method");
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No authorized");
+        res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No autorizado");
     }
 }
